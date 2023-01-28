@@ -1,66 +1,135 @@
 import java.util.Scanner;
-class Strukturdata3 {
-    static Scanner in=new Scanner(System.in);
-    public void insert(node a, int b){
-        if(b<a.value){
-            if(a.left!=null) insert(a.left,b);
-            else{
-                a.left=new node();
-                a.left.input(b);
-                System.out.println(b+" di kiri  "+a.value);
-            }
-        }
-        else if(b>a.value){
-            if(a.right!=null) insert(a.right,b);
-            else{
-                a.right=new node();
-                a.right.input(b);
-                System.out.println(b+" di kanan "+a.value);
-            }
-        }
-    }
-    public void view(node a){
-        System.out.print("Pre Order  : ");
-        preOrder(a);
-        System.out.println(" ");
-    }
-    public void preOrder(node a){
-        if(a!=null){
-            System.out.print(a.value+" ");
-            preOrder(a.left);
-            preOrder(a.right);
-        }
-    }
-}
+class Strukturdata2
+{
+    public static int[] data = null;
+    public static int awal, tengah, akhir, temp, count;
 
-class node{
-    node left,right;
-    int value;
-    public void input(int a){
-        value=a;
-    }
-    public static void main(String[] args){
-        Strukturdata3 tr=new Strukturdata3();
-        node root=new node();
-        int menu=1;
-        int r=1;
-        int a;
-        while(menu!=3){
-            System.out.print("1.masukan\n2.tampilkan\n3.keluar\n : ");
-            menu=tr.in.nextInt();
-            if(menu==1){
-                System.out.print("Masukkan Angka : ");
-                a=tr.in.nextInt();
-                if(r==1){
-                    root.input(a);
-                    r--;
-                }
-                else tr.insert(root,a);
+    public static void main(String[] args)
+    {
+        Scanner scan = new Scanner(System.in);
+
+        //	Input jumlah data
+        System.out.print("Jumlah data : ");
+        int jlh = scan.nextInt();
+
+        //	Input tiap nilai dan simpan ke array
+        data = new int[jlh];
+        for(int x = 0; x < data.length; x++)
+        {
+            System.out.print("Masukkan Data ke-"+(x+1)+" : ");
+            data[x] = scan.nextInt();
+        }
+
+        //	Menampilkan data sebelum di sorting
+        System.out.print("\nData    : ");
+        for(int x = 0; x < data.length; x++)
+            System.out.print(data[x]+" ");
+
+        //	Proses sorting
+        sorting();
+
+        //	Menampilkan Data setelah di sorting1
+        System.out.println();
+        System.out.print("Sorting : ");
+        for(int x = 0; x < data.length; x++)
+            System.out.print(data[x]+" ");
+
+        //	Input data yang dicari
+        System.out.print("\nData yang dicari : ");
+        int cari = scan.nextInt();
+
+        //	Proses Metode Pencarian Binary Searching
+        System.out.println();
+        boolean temu = false;
+        awal = 0;
+        akhir = data.length - 1;
+        temp = 0;
+        count = 0;
+        int iterasi = 0;
+        System.out.println("It  Aw  Ak  Te  Ni");
+        while(temu != true)
+        {
+            tengah = (awal + akhir) / 2;
+            iterasi++;
+
+            //	value == cari
+            if(data[tengah] == cari)
+            {
+                System.out.print(iterasi+"   ");
+                System.out.print(awal+"   ");
+                System.out.print(akhir+"   ");
+                System.out.print(tengah+"   ");
+                System.out.print(data[tengah]+"\n");
+                temu = true;
+                break;
             }
-            else if(menu==2) tr.view(root);
-            else if(menu==3) System.out.println("Keluar");
-            else System.out.println("Salah");
-            System.out.println(" ");
+
+            //	value < cari
+            else if(data[tengah] < cari)
+            {
+                System.out.print(iterasi+"   ");
+                System.out.print(awal+"   ");
+                System.out.print(akhir+"   ");
+                System.out.print(tengah+"   ");
+                System.out.print(data[tengah]+"\n");
+                awal = tengah + 1;
+
+            }
+
+            //	value > cari
+            else if(data[tengah] > cari)
+            {
+                System.out.print(iterasi+"   ");
+                System.out.print(awal+"   ");
+                System.out.print(akhir+"   ");
+                System.out.print(tengah+"   ");
+                System.out.print(data[tengah]+"\n");
+                akhir = tengah - 1;
+            }
+
+            //	Cek Worst Case
+            if(temp != data[tengah])
+                temp = data[tengah];
+            else
+                count++;
+
+            //	batasan untuk worst case
+            if(count == 3)
+                break;
+        }
+
+        //	Output
+        if(temu == true)
+            System.out.println("\nData "+cari+" ditemukan pada index ke-"+tengah+"\n"+
+                    "dan Iterasi ke-"+iterasi);
+
+        else
+            System.out.println("\nData "+cari+" tidak ditemukan");
+
+    }
+
+    //	Sorting Ascending
+    public static void sorting()
+    {
+        int temp = 0;
+        for(int x = 0; x < data.length; x++)
+        {
+            for(int y = 0; y < data.length; y++)
+            {
+                if(x == y)
+                    continue;
+
+                else
+                {
+                    if(data[x] < data[y])
+                    {
+                        temp = data[y];
+                        data[y] = data[x];
+                        data[x] = temp;
+
+                    }
+                }
+            }
         }
     }
 }
